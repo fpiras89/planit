@@ -3,6 +3,11 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
+    <PackageVersion Include="GraphQL" Version="8.2.1" />
+    <PackageVersion Include="GraphQL.MicrosoftDI" Version="8.2.1" />
+    <PackageVersion Include="GraphQL.Server.Transports.AspNetCore" Version="8.1.0" />
+    <PackageVersion Include="GraphQL.SystemTextJson" Version="8.2.1" />
+    <PackageVersion Include="MediatR" Version="12.4.1" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="8.0.10" />
     <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="8.0.4" />
     <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="8.0.8" />
