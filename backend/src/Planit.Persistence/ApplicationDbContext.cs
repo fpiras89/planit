@@ -11,16 +11,16 @@ public class ApplicationDbContext : DbContext, IDbContext
     {
     }
 
-    public DbSet<Capacity> Capacities { get; set; }
-    public DbSet<Project> Projects { get; set; }
-    public DbSet<ProjectAllocation> ProjectAllocations { get; set; }
-    public DbSet<ProjectDemand> ProjectDemands { get; set; }
-    public DbSet<Resource> Resources { get; set; }
-    public DbSet<ResourceSkill> ResourceSkills { get; set; }
-    public DbSet<Setting> Settings { get; set; }
-    public DbSet<Skill> Skills { get; set; }
+    public DbSet<CapacityEntity> Capacities { get; set; }
+    public DbSet<ProjectEntity> Projects { get; set; }
+    public DbSet<ProjectAllocationEntity> ProjectAllocations { get; set; }
+    public DbSet<ProjectDemandEntity> ProjectDemands { get; set; }
+    public DbSet<ResourceEntity> Resources { get; set; }
+    public DbSet<ResourceSkillEntity> ResourceSkills { get; set; }
+    public DbSet<SettingEntity> Settings { get; set; }
+    public DbSet<SkillEntity> Skills { get; set; }
     public DbSet<SkillCategory> SkillCategories { get; set; }
-    public DbSet<User> Users { get; set; }
+    public DbSet<UserEntity> Users { get; set; }
 
     public T AddOne<T>(T entity) where T : class
     {

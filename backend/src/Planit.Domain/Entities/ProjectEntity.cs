@@ -1,9 +1,9 @@
 ﻿namespace Planit.Domain.Entities;
 
-public class Project
+public class ProjectEntity
 {
     public Guid Id { get; set; }
     public string Name { get; set; }
 
-    public virtual ICollection<ProjectDemand> ProjectDemands { get; set; }
+    public virtual ICollection<ProjectDemandEntity> ProjectDemands { get; set; }
 }

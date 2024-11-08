@@ -4,9 +4,9 @@ using Planit.Domain.Entities;
 
 namespace Planit.Persistence.Configurations;
 
-public class SettingConfiguration : IEntityTypeConfiguration<Setting>
+public class SettingConfiguration : IEntityTypeConfiguration<SettingEntity>
 {
-    public void Configure(EntityTypeBuilder<Setting> builder)
+    public void Configure(EntityTypeBuilder<SettingEntity> builder)
     {
         builder.HasKey(s => s.Key);
         builder.Property(s => s.Value).IsRequired();

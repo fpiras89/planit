@@ -4,9 +4,9 @@ using Planit.Domain.Entities;
 
 namespace Planit.Persistence.Configurations;
 
-public class SkillConfiguration : IEntityTypeConfiguration<Skill>
+public class SkillConfiguration : IEntityTypeConfiguration<SkillEntity>
 {
-    public void Configure(EntityTypeBuilder<Skill> builder)
+    public void Configure(EntityTypeBuilder<SkillEntity> builder)
     {
         builder.HasKey(s => s.Id);
         builder.Property(s => s.Name).IsRequired().HasMaxLength(50);

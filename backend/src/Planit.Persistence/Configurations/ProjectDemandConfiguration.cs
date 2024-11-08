@@ -4,9 +4,9 @@ using Planit.Domain.Entities;
 
 namespace Planit.Persistence.Configurations;
 
-public class ProjectDemandConfiguration : IEntityTypeConfiguration<ProjectDemand>
+public class ProjectDemandConfiguration : IEntityTypeConfiguration<ProjectDemandEntity>
 {
-    public void Configure(EntityTypeBuilder<ProjectDemand> builder)
+    public void Configure(EntityTypeBuilder<ProjectDemandEntity> builder)
     {
         builder.HasKey(pd => pd.Id);
         builder.Property(pd => pd.Seniority).IsRequired();

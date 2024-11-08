@@ -4,9 +4,9 @@ using Planit.Domain.Entities;
 
 namespace Planit.Persistence.Configurations;
 
-public class ResourceConfiguration : IEntityTypeConfiguration<Resource>
+public class ResourceConfiguration : IEntityTypeConfiguration<ResourceEntity>
 {
-    public void Configure(EntityTypeBuilder<Resource> builder)
+    public void Configure(EntityTypeBuilder<ResourceEntity> builder)
     {
         builder.HasKey(r => r.Id);
         builder.Property(r => r.Name).IsRequired().HasMaxLength(50);

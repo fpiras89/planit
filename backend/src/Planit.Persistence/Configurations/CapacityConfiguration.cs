@@ -4,9 +4,9 @@ using Planit.Domain.Entities;
 
 namespace Planit.Persistence.Configurations;
 
-public class CapacityConfiguration : IEntityTypeConfiguration<Capacity>
+public class CapacityConfiguration : IEntityTypeConfiguration<CapacityEntity>
 {
-    public void Configure(EntityTypeBuilder<Capacity> builder)
+    public void Configure(EntityTypeBuilder<CapacityEntity> builder)
     {
         builder.HasKey(c => c.Id);
         builder.Property(c => c.Amount).IsRequired();

@@ -4,9 +4,9 @@ using Planit.Domain.Entities;
 
 namespace Planit.Persistence.Configurations;
 
-public class ProjectAllocationConfiguration : IEntityTypeConfiguration<ProjectAllocation>
+public class ProjectAllocationConfiguration : IEntityTypeConfiguration<ProjectAllocationEntity>
 {
-    public void Configure(EntityTypeBuilder<ProjectAllocation> builder)
+    public void Configure(EntityTypeBuilder<ProjectAllocationEntity> builder)
     {
         builder.HasKey(pa => pa.Id);
         builder.Property(pa => pa.Seniority).IsRequired();

@@ -1,6 +1,6 @@
 ﻿namespace Planit.Domain.Entities;
 
-public class User
+public class UserEntity
 {
 
 }
