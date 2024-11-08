@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Planit.Application.Interfaces;
+using Planit.Domain.Abstractions.Specifications;
 using Planit.Domain.Entities;
 using System.Linq.Expressions;
 
@@ -32,7 +33,7 @@ public class ApplicationDbContext : DbContext, IDbContext
         Set<T>().AddRangeAsync(entities);
     }
 
-    public Task<List<T>> AllAsync<T>(Expression<Func<T, bool>>? predicate = null) where T : class
+    public Task<List<T>> GetAllAsync<T>(Expression<Func<T, bool>>? predicate = null) where T : class
     {
         var query = Query<T>();
         if (predicate is not null)
@@ -53,7 +54,7 @@ public class ApplicationDbContext : DbContext, IDbContext
         Set<T>().RemoveRange(entities);
     }
 
-    public Task<T?> FirstAsync<T>(Expression<Func<T, bool>>? predicate = null) where T : class
+    public Task<T?> GetFirstAsync<T>(Expression<Func<T, bool>>? predicate = null) where T : class
     {
         var query = Query<T>();
         if (predicate is not null)
@@ -74,10 +75,21 @@ public class ApplicationDbContext : DbContext, IDbContext
         Set<T>().UpdateRange(entities);
     }
 
+    public Task<T?> GetFirstBySpecificationAsync<T>(ISpecification<T> specification) where T : class
+    {
+        return SpecificationEvaluator.ApplySpecification(Query<T>(), specification).FirstOrDefaultAsync();
+    }
+
+    public Task<List<T>> GetAllBySpecificationAsync<T>(ISpecification<T> specification) where T : class
+    {
+        return SpecificationEvaluator.ApplySpecification(Query<T>(), specification).ToListAsync();
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(PersistenceAssembly.Assembly);
     }
+
     protected IQueryable<T> Query<T>() where T : class
     {
         return Set<T>().AsQueryable();
