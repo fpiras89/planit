@@ -14,8 +14,4 @@
     <ProjectReference Include="..\Planit.Domain\Planit.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Project\Commands\" />
-  </ItemGroup>
-
 </Project>

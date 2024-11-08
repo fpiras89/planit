@@ -13,7 +13,7 @@ public interface IDbContext
     void RemoveRange<T>(params T[] entities) where T : class;
     Task<T?> GetFirstAsync<T>(Expression<Func<T, bool>>? predicate = null) where T : class;
     Task<List<T>> GetAllAsync<T>(Expression<Func<T, bool>>? predicate = null) where T : class;
-
     Task<T?> GetFirstBySpecificationAsync<T>(ISpecification<T> specification) where T : class;
     Task<List<T>> GetAllBySpecificationAsync<T>(ISpecification<T> specification) where T : class;
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

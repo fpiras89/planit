@@ -8,7 +8,7 @@ namespace Planit.Presentation.GraphQL;
 public partial class Query
 {
     [Scoped]
-    public static async Task<ProjectDto> Project(
+    public static async Task<ProjectDto?> Project(
         [FromServices] IRequestDispatcher requestDispatcher,
         Guid projectId)
     {

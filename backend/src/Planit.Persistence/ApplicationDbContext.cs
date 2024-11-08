@@ -20,7 +20,7 @@ public class ApplicationDbContext : DbContext, IDbContext
     public DbSet<SettingEntity> Settings { get; set; }
     public DbSet<SkillEntity> Skills { get; set; }
     public DbSet<SkillCategory> SkillCategories { get; set; }
-    public DbSet<UserEntity> Users { get; set; }
+    //public DbSet<UserEntity> Users { get; set; }
 
     public T AddOne<T>(T entity) where T : class
     {

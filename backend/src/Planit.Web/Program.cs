@@ -1,28 +1,46 @@
 using GraphQL;
-using Planit.Application.Interfaces;
-using Planit.Persistence;
-using Planit.Presentation.GraphQL;
 using Microsoft.EntityFrameworkCore;
+using Planit.Application.Interfaces;
+using Planit.Infrastructure;
+using Planit.Persistence;
+using Planit.Persistence.Services;
+using Planit.Presentation.GraphQL;
+using Planit.Application;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddGraphQL(b => b
     .AddAutoSchema<Query>(c => c.WithMutation<Mutation>())
+    .AddErrorInfoProvider(options => options.ExposeExceptionDetails = builder.Environment.IsDevelopment())
+    .ConfigureExecutionOptions(options =>
+    {
+        var logger = options.RequestServices!.GetRequiredService<ILogger<Program>>();
+        options.UnhandledExceptionDelegate = ctx =>
+        {
+            logger.LogError("GraphQL Unhandled Exception: {ErrorMessage} | {OriginalExceptionMessage}", ctx.ErrorMessage, ctx.OriginalException.Message);
+            logger.LogError(ctx.Context.Document.ToString());
+            return Task.CompletedTask;
+        };
+    })
     .AddSystemTextJson()
     .UseTelemetry()
 );
 
-/*builder.Services.AddDbContext<ApplicationDbContext>(b => b                 
+builder.Services.AddDbContext<ApplicationDbContext>(b => b 
     .UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"), options =>
     {
         options.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName);
     }));
-builder.Services.AddScoped<IDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());*/
+builder.Services.AddScoped<IDbContext>(sp => sp.GetRequiredService<ApplicationDbContext>());
+
+builder.Services.AddHostedService<ApplicationInitializer>();
+builder.Services.AddScoped<IApplicationInitializer, MigrationsService>();
+
+builder.Services.AddApplicationServices();
 
 var app = builder.Build();
 
