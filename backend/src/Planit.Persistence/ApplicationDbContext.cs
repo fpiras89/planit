@@ -63,11 +63,6 @@ public class ApplicationDbContext : DbContext, IDbContext
         return query.FirstOrDefaultAsync();
     }
 
-    public IQueryable<T> Query<T>() where T : class
-    {
-        return Set<T>().AsQueryable();
-    }
-
     public T UpdateOne<T>(T entity) where T : class
     {
         var result = Set<T>().Update(entity);
@@ -82,5 +77,9 @@ public class ApplicationDbContext : DbContext, IDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(PersistenceAssembly.Assembly);
+    }
+    protected IQueryable<T> Query<T>() where T : class
+    {
+        return Set<T>().AsQueryable();
     }
 }

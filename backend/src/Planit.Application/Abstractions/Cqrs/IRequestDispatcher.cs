@@ -1,13 +1,15 @@
 ﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Planit.Domain.Models;
 
 namespace Planit.Application.Abstractions.Cqrs;
-public interface IRequestDispatcher : ISender
+
+public interface IRequestDispatcher
 {
+    Task<Result> DispatchAsync(ICommand command, CancellationToken cancellationToken = default);
+
+    Task<Result<TResponse>> DispatchAsync<TResponse>(ICommand<TResponse> command, CancellationToken cancellationToken = default);
+
+    Task<Result<TResponse>> DispatchAsync<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default);
 }
 
 public class RequestDispatcher : IRequestDispatcher
@@ -19,28 +21,18 @@ public class RequestDispatcher : IRequestDispatcher
         _mediator = mediator;
     }
 
-    public IAsyncEnumerable<TResponse> CreateStream<TResponse>(IStreamRequest<TResponse> request, CancellationToken cancellationToken = default)
+    public Task<Result> DispatchAsync(ICommand command, CancellationToken cancellationToken = default)
     {
-        return _mediator.CreateStream(request, cancellationToken);
+        return _mediator.Send(command, cancellationToken);
     }
 
-    public IAsyncEnumerable<object?> CreateStream(object request, CancellationToken cancellationToken = default)
+    public Task<Result<TResponse>> DispatchAsync<TResponse>(ICommand<TResponse> command, CancellationToken cancellationToken = default)
     {
-        return _mediator.CreateStream(request, cancellationToken);
+        return _mediator.Send(command, cancellationToken);
     }
 
-    public Task Send<TRequest>(TRequest request, CancellationToken cancellationToken = default) where TRequest : IRequest
+    public Task<Result<TResponse>> DispatchAsync<TResponse>(IQuery<TResponse> query, CancellationToken cancellationToken = default)
     {
-        return _mediator.Send(request, cancellationToken);
-    }
-
-    public Task<object?> Send(object request, CancellationToken cancellationToken = default)
-    {
-        return _mediator.Send(request, cancellationToken);
-    }
-
-    public Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default)
-    {
-        return _mediator.Send(request, cancellationToken);
+        return _mediator.Send(query, cancellationToken);
     }
 }
