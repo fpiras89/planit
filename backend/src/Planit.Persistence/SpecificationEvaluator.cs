@@ -22,23 +22,27 @@ public static class SpecificationEvaluator
             query = query.Where(specification.Criteria);
         }
 
-        // Includes all expression-based includes
+        // Apply all expression-based includes
         query = specification.Includes.Aggregate(query, (current, include) => current.Include(include));
+
+        // Apply all string-based includes
+        query = specification.IncludesString.Aggregate(query, (current, include) => current.Include(include));
 
         // Apply ordering if expressions are set
         if (specification.OrderBy.Any())
         {
-            // Order by first expression
-            var orderQuery = query.OrderBy(specification.OrderBy.First());
-            // Apply order by remaining expressions
-            orderQuery = specification.OrderByDesc.Skip(1).Aggregate(orderQuery, (current, orderByDesc) => current.ThenBy(orderByDesc));
+            // Order by for first expression
+            var (firstExp, firstAsc) = specification.OrderBy.First();
+            var orderQuery = firstAsc ? query.OrderBy(firstExp) : query.OrderByDescending(firstExp);
+
+            // Apply order by for remaining expressions
+            orderQuery = specification.OrderBy.Skip(1).Aggregate(orderQuery, (current, orderBy) => 
+            {
+                var (exp, asc) = orderBy;
+                return asc ? current.ThenBy(exp) : current.ThenByDescending(exp);
+            });
+
             // Apply the ordering to the query
-            query = orderQuery;
-        } 
-        else if (specification.OrderByDesc.Any())
-        {
-            var orderQuery = query.OrderByDescending(specification.OrderByDesc.First());
-            orderQuery = specification.OrderByDesc.Skip(1).Aggregate(orderQuery, (current, orderByDesc) => current.ThenByDescending(orderByDesc));
             query = orderQuery;
         }
 

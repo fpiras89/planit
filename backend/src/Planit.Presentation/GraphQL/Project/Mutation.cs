@@ -9,9 +9,18 @@ public partial class Mutation
     [Scoped]
     public static async Task<ProjectDto> AddProject(
         [FromServices] IRequestDispatcher requestDispatcher,
-        string name)
+        ProjectInputDto project)
     {
-        var result = await requestDispatcher.DispatchAsync(new AddProject.Command(name));
+        var result = await requestDispatcher.DispatchAsync(new AddProject.Command(project));
+        return result.Value;
+    }
+
+    [Scoped]
+    public static async Task<ProjectDto> AddProjectDemand(
+        [FromServices] IRequestDispatcher requestDispatcher,
+        Guid projectId, List<ProjectDemandInputDto> projectDemands)
+    {
+        var result = await requestDispatcher.DispatchAsync(new AddProjectDemands.Command(projectId, projectDemands));
         return result.Value;
     }
 }

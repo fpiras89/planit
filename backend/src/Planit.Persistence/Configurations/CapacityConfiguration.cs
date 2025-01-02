@@ -4,13 +4,13 @@ using Planit.Domain.Entities;
 
 namespace Planit.Persistence.Configurations;
 
-public class CapacityConfiguration : IEntityTypeConfiguration<CapacityEntity>
+public class CapacityConfiguration : IEntityTypeConfiguration<ResourceCapacityEntity>
 {
-    public void Configure(EntityTypeBuilder<CapacityEntity> builder)
+    public void Configure(EntityTypeBuilder<ResourceCapacityEntity> builder)
     {
         builder.HasKey(c => c.Id);
         builder.Property(c => c.Amount).IsRequired();
-        builder.HasIndex(c => new { c.ResourceId, c.Date }).IsUnique();
+        builder.HasIndex(c => new { c.ResourceId, c.StartDate }).IsUnique();
 
         // Foreign key relationship
         builder.HasOne(c => c.Resource)

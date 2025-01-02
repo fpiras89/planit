@@ -2,7 +2,8 @@
 
 namespace Planit.Domain.Abstractions.Specifications;
 
-public abstract class BaseSpecification<T> : ISpecification<T> where T : class
+public abstract class BaseSpecification<T> : ISpecification<T> 
+    where T : class
 {
     public BaseSpecification(Expression<Func<T, bool>> criteria)
     {
@@ -13,9 +14,9 @@ public abstract class BaseSpecification<T> : ISpecification<T> where T : class
 
     public List<Expression<Func<T, object>>> Includes { get; private set; } = new();
 
-    public List<Expression<Func<T, object>>> OrderBy { get; private set; } = new();
+    public List<string> IncludesString { get; private set; } = new();
 
-    public List<Expression<Func<T, object>>> OrderByDesc { get; private set; } = new();
+    public List<(Expression<Func<T, object>>, bool)> OrderBy { get; private set; } = new();
 
     public int? Take { get; private set; }
 
@@ -28,14 +29,14 @@ public abstract class BaseSpecification<T> : ISpecification<T> where T : class
         Includes.Add(includeExpression);
     }
 
-    protected void AddOrderBy(Expression<Func<T, object>> orderByExpression)
+    protected void AddInclude(string include)
     {
-        OrderBy.Add(orderByExpression);
+        IncludesString.Add(include);
     }
 
-    protected void AddOrderByDesc(Expression<Func<T, object>> orderByDescExpression)
+    protected void AddOrderBy(Expression<Func<T, object>> orderByExpression, bool asc = true)
     {
-        OrderByDesc.Add(orderByDescExpression);
+        OrderBy.Add((orderByExpression, asc));
     }
 
     protected void ApplyPagination(int? take = null, int? skip = null)

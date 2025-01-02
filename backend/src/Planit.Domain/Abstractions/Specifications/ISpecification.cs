@@ -13,9 +13,14 @@ public interface ISpecification<T> where T : class
     Expression<Func<T, bool>> Criteria { get; }
 
     /// <summary>
-    /// The list of include expressions.
+    /// The list of expression-based includes.
     /// </summary>
     List<Expression<Func<T, object>>> Includes { get; }
+
+    /// <summary>
+    /// The list of string-based includes.
+    /// </summary>
+    List<string> IncludesString { get; }
 
     /// <summary>
     /// Adds an include expression.
@@ -30,12 +35,7 @@ public interface ISpecification<T> where T : class
     /// <summary>
     /// The list of order by expressions.
     /// </summary>
-    List<Expression<Func<T, object>>> OrderBy { get; }
-
-    /// <summary>
-    /// The list of order by descendent expressions.
-    /// </summary>
-    List<Expression<Func<T, object>>> OrderByDesc { get; }
+    List<(Expression<Func<T, object>>, bool)> OrderBy { get; }
 
     bool IsReadOnly { get; }
 }

@@ -15,7 +15,13 @@ builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddGraphQL(b => b
     .AddAutoSchema<Query>(c => c.WithMutation<Mutation>())
-    .AddErrorInfoProvider(options => options.ExposeExceptionDetails = builder.Environment.IsDevelopment())
+    .AddErrorInfoProvider(options =>
+    {
+        options.ExposeExceptionDetails = builder.Environment.IsDevelopment();
+        options.ExposeData = true;
+        options.ExposeExtensions = true;
+        options.ExposeCode = true;
+    })
     .ConfigureExecutionOptions(options =>
     {
         var logger = options.RequestServices!.GetRequiredService<ILogger<Program>>();

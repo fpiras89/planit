@@ -2,7 +2,6 @@
 using Planit.Application.Abstractions.Cqrs;
 using Planit.Application.Dtos;
 using Planit.Application.Features.Project.Queries;
-using Planit.Domain.Models;
 
 namespace Planit.Presentation.GraphQL;
 public partial class Query

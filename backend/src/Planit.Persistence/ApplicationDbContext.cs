@@ -11,7 +11,7 @@ public class ApplicationDbContext : DbContext, IDbContext
     {
     }
 
-    public DbSet<CapacityEntity> Capacities { get; set; }
+    public DbSet<ResourceCapacityEntity> Capacities { get; set; }
     public DbSet<ProjectEntity> Projects { get; set; }
     public DbSet<ProjectAllocationEntity> ProjectAllocations { get; set; }
     public DbSet<ProjectDemandEntity> ProjectDemands { get; set; }
@@ -20,8 +20,7 @@ public class ApplicationDbContext : DbContext, IDbContext
     public DbSet<SettingEntity> Settings { get; set; }
     public DbSet<SkillEntity> Skills { get; set; }
     public DbSet<SkillCategory> SkillCategories { get; set; }
-    //public DbSet<UserEntity> Users { get; set; }
-
+    
     public T AddOne<T>(T entity) where T : class
     {
         var result = Set<T>().Add(entity);
@@ -33,14 +32,14 @@ public class ApplicationDbContext : DbContext, IDbContext
         Set<T>().AddRangeAsync(entities);
     }
 
-    public Task<List<T>> GetAllAsync<T>(Expression<Func<T, bool>>? predicate = null) where T : class
+    public Task<List<T>> GetAllAsync<T>(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default) where T : class
     {
         var query = Query<T>();
         if (predicate is not null)
         {
             query = query.Where(predicate);
         }
-        return query.ToListAsync();
+        return query.ToListAsync(cancellationToken);
     }
 
     public T RemoveOne<T>(T entity) where T : class
@@ -54,14 +53,14 @@ public class ApplicationDbContext : DbContext, IDbContext
         Set<T>().RemoveRange(entities);
     }
 
-    public Task<T?> GetFirstAsync<T>(Expression<Func<T, bool>>? predicate = null) where T : class
+    public Task<T?> GetFirstAsync<T>(Expression<Func<T, bool>>? predicate = null, CancellationToken cancellationToken = default) where T : class
     {
         var query = Query<T>();
         if (predicate is not null)
         {
             query = query.Where(predicate);
         }
-        return query.FirstOrDefaultAsync();
+        return query.FirstOrDefaultAsync(cancellationToken);
     }
 
     public T UpdateOne<T>(T entity) where T : class
@@ -75,14 +74,14 @@ public class ApplicationDbContext : DbContext, IDbContext
         Set<T>().UpdateRange(entities);
     }
 
-    public Task<T?> GetFirstBySpecificationAsync<T>(ISpecification<T> specification) where T : class
+    public Task<T?> GetFirstBySpecificationAsync<T>(ISpecification<T> specification, CancellationToken cancellationToken = default) where T : class
     {
-        return SpecificationEvaluator.ApplySpecification(Query<T>(), specification).FirstOrDefaultAsync();
+        return SpecificationEvaluator.ApplySpecification(Query<T>(), specification).FirstOrDefaultAsync(cancellationToken);
     }
 
-    public Task<List<T>> GetAllBySpecificationAsync<T>(ISpecification<T> specification) where T : class
+    public Task<List<T>> GetAllBySpecificationAsync<T>(ISpecification<T> specification, CancellationToken cancellationToken = default) where T : class
     {
-        return SpecificationEvaluator.ApplySpecification(Query<T>(), specification).ToListAsync();
+        return SpecificationEvaluator.ApplySpecification(Query<T>(), specification).ToListAsync(cancellationToken);
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

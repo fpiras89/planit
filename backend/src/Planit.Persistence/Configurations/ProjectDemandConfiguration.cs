@@ -9,8 +9,8 @@ public class ProjectDemandConfiguration : IEntityTypeConfiguration<ProjectDemand
     public void Configure(EntityTypeBuilder<ProjectDemandEntity> builder)
     {
         builder.HasKey(pd => pd.Id);
-        builder.Property(pd => pd.Seniority).IsRequired();
-        builder.Property(pd => pd.Date).IsRequired();
+        builder.Property(pd => pd.MinLevel).IsRequired();
+        builder.Property(pd => pd.EndDate).IsRequired();
         builder.Property(pd => pd.Effort).IsRequired();
         builder.Property(pd => pd.Description).HasMaxLength(256);
 

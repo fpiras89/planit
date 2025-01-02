@@ -21,12 +21,13 @@ public static class GetProject
 
         public async Task<Result<ProjectDto>> Handle(Query request, CancellationToken cancellationToken)
         {
-            var entity = await dbContext.GetFirstBySpecificationAsync(new GetProjectByIdSpecification(request.ProjectId));
+            var entity = await dbContext.GetFirstBySpecificationAsync(
+                new GetProjectByIdSpecification(request.ProjectId));
            
             if (entity == null)
                 return Errors.NotFound;
             
-            return new ProjectDto(entity.Id, entity.Name);   
+            return entity.ToDto();   
         }
     }
 }

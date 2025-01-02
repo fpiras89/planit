@@ -5,16 +5,11 @@ namespace Planit.Domain.Specifications;
 
 public class GetProjectByIdSpecification : BaseSpecification<ProjectEntity>
 {
-    public GetProjectByIdSpecification(Guid Id) : base(e => e.Id == Id)
+    public GetProjectByIdSpecification(Guid Id, bool includeDemands = true) : base(e => e.Id == Id)
     {
-    }
-}
-
-public class GetProjectsByNameSpecification : BaseSpecification<ProjectEntity>
-{
-    public GetProjectsByNameSpecification(string name, int? take = null, int? skip = null) : base(e => e.Name.Contains(name))
-    {
-        AddOrderBy(e => e.Name);
-        ApplyPagination(take, skip);
+        if (includeDemands)
+        {
+            AddInclude(e => e.ProjectDemands);
+        }
     }
 }

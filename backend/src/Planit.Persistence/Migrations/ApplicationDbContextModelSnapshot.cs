@@ -22,29 +22,6 @@ namespace Planit.Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Planit.Domain.Entities.CapacityEntity", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<double>("Amount")
-                        .HasColumnType("float");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("ResourceId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ResourceId", "Date")
-                        .IsUnique();
-
-                    b.ToTable("Capacities");
-                });
-
             modelBuilder.Entity("Planit.Domain.Entities.ProjectAllocationEntity", b =>
                 {
                     b.Property<Guid>("Id")
@@ -75,25 +52,31 @@ namespace Planit.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasMaxLength(256)
                         .HasColumnType("nvarchar(256)");
 
                     b.Property<double>("Effort")
                         .HasColumnType("float");
 
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<int>("MinLevel")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("ProjectId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("Seniority")
-                        .HasColumnType("int");
-
                     b.Property<Guid>("SkillId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
 
                     b.HasKey("Id");
 
@@ -110,14 +93,52 @@ namespace Planit.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("UpdatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.ToTable("Projects");
+                });
+
+            modelBuilder.Entity("Planit.Domain.Entities.ResourceCapacityEntity", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<double>("Amount")
+                        .HasColumnType("float");
+
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
+
+                    b.Property<Guid>("ResourceId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateOnly>("StartDate")
+                        .HasColumnType("date");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ResourceId", "StartDate")
+                        .IsUnique();
+
+                    b.ToTable("Capacities");
                 });
 
             modelBuilder.Entity("Planit.Domain.Entities.ResourceEntity", b =>
@@ -142,11 +163,11 @@ namespace Planit.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<int>("Level")
+                        .HasColumnType("int");
+
                     b.Property<Guid>("ResourceId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("Seniority")
-                        .HasColumnType("int");
 
                     b.Property<Guid>("SkillId")
                         .HasColumnType("uniqueidentifier");
@@ -196,7 +217,7 @@ namespace Planit.Persistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("CategoryId")
+                    b.Property<Guid?>("CategoryId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
@@ -209,17 +230,6 @@ namespace Planit.Persistence.Migrations
                     b.HasIndex("CategoryId");
 
                     b.ToTable("Skills");
-                });
-
-            modelBuilder.Entity("Planit.Domain.Entities.CapacityEntity", b =>
-                {
-                    b.HasOne("Planit.Domain.Entities.ResourceEntity", "Resource")
-                        .WithMany("Capacities")
-                        .HasForeignKey("ResourceId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Resource");
                 });
 
             modelBuilder.Entity("Planit.Domain.Entities.ProjectAllocationEntity", b =>
@@ -260,6 +270,17 @@ namespace Planit.Persistence.Migrations
                     b.Navigation("Skill");
                 });
 
+            modelBuilder.Entity("Planit.Domain.Entities.ResourceCapacityEntity", b =>
+                {
+                    b.HasOne("Planit.Domain.Entities.ResourceEntity", "Resource")
+                        .WithMany("Capacities")
+                        .HasForeignKey("ResourceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Resource");
+                });
+
             modelBuilder.Entity("Planit.Domain.Entities.ResourceSkillEntity", b =>
                 {
                     b.HasOne("Planit.Domain.Entities.ResourceEntity", "Resource")
@@ -283,9 +304,7 @@ namespace Planit.Persistence.Migrations
                 {
                     b.HasOne("Planit.Domain.Entities.SkillCategory", "Category")
                         .WithMany("Skills")
-                        .HasForeignKey("CategoryId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CategoryId");
 
                     b.Navigation("Category");
                 });

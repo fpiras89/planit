@@ -1,13 +1,13 @@
 ﻿using Planit.Application.Abstractions.Cqrs;
 using Planit.Application.Dtos;
 using Planit.Application.Interfaces;
-using Planit.Domain.Entities;
 using Planit.Domain.Models;
 
 namespace Planit.Application.Features.Project.Queries;
+
 public static class AddProject
 {
-    public record Command(string Name) : ICommand<ProjectDto>;
+    public record Command(ProjectInputDto Project) : ICommand<ProjectDto>;
 
     internal class Handler : ICommandHandler<Command, ProjectDto>
     {
@@ -20,12 +20,11 @@ public static class AddProject
 
         public async Task<Result<ProjectDto>> Handle(Command request, CancellationToken cancellationToken)
         {
-            var entity = new ProjectEntity { Name = request.Name };
+            var entity = request.Project.ToEntity();
             dbContext.AddOne(entity);
-           
             await dbContext.SaveChangesAsync(cancellationToken);
             
-            return new ProjectDto(entity.Id, entity.Name);   
+            return entity.ToDto();   
         }
     }
 }

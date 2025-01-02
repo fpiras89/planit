@@ -9,7 +9,7 @@ public class ResourceSkillConfiguration : IEntityTypeConfiguration<ResourceSkill
     public void Configure(EntityTypeBuilder<ResourceSkillEntity> builder)
     {
         builder.HasKey(rs => rs.Id);
-        builder.Property(rs => rs.Seniority).IsRequired();
+        builder.Property(rs => rs.Level).IsRequired();
 
         // Foreign key relationships
         builder.HasOne(rs => rs.Resource)
